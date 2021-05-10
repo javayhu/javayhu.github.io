@@ -54,7 +54,7 @@
 		navigator.clipboard.writeText('hello world');
 
         // javayhu 如果先判断权限又会报错 Uncaught TypeError: Cannot read property 'query' of undefined
-		navigator.permissions.query({name: "clipboard-write"}).then(result => {
+		navigator.permissions.query({name: "clipboard-write", allowWithoutGesture: true}).then(result => {
           if (result.state == "granted" || result.state == "prompt") {
             console.log(result.state);
             navCopyResult.innerText = "copy result:" + result.state;
