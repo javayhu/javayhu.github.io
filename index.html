@@ -6,23 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>javayhu test html</title>
 </head>
-<body style="padding-top:100px;padding-left:50px;">
+<body style="padding-top:20px;padding-left:20px;">
+
+<p>
+    <div>测试流程</div>
+    <ul>
+        <li>打开开关，在输入框中输入任意内容</li>
+        <li>点击 复制内容到剪切板 按钮，验证输入的内容成功保存到剪切板中</li>
+        <li>关闭开关，在输入框中输入任意内容</li>
+        <li>点击 复制内容到剪切板 按钮，验证输入的内容并没有保存到剪切板中</li>
+        <li>无论开关打开还是关闭，粘贴剪切板的内容都是失败</li>
+    </ul>
+</p>
 
 <input id="input" type="text"/> <br/>
-<button id="copy">复制内容到剪切板(document.execCommand)</button> <br/>
+<button id="copy">复制内容到剪切板(document.execCommand('copy'))</button> <br/>
 <div id="copy_result"></div>
 
-<div style="height:100px;"></div>
+<div style="height:50px;"></div>
 
 <input id="output" type="text"/> <br/>
-<button id="paste">粘贴剪切板的内容</button> <br/>
+<button id="paste">粘贴剪切板的内容(document.execCommand('paste'))</button> <br/>
 <div id="paste_result"></div>
-
-<div style="height:100px;"></div>
-
-<input id="nav_input" type="text"/> <br/>
-<button id="nav_copy">复制剪切板的内容(navigator.clipboard)</button> <br/>
-<div id="nav_copy_result"></div>
 
 <script>
     // javayhu 复制是成功的，但是粘贴是失败的，暂不知为何
@@ -30,8 +35,8 @@
 	const copyText = document.querySelector('#input');
 	const copyResult = document.querySelector('#copy_result');
 	copyButton.addEventListener('click', function() {
-		copyText.select();
-		var result = document.execCommand("Copy");
+        copyText.select();
+        var result = document.execCommand("Copy");
 		copyResult.innerText = "copy result:" + result;
 	});
 
@@ -42,24 +47,6 @@
 		pasteText.focus();
 		var result = document.execCommand("Paste");
 		pasteResult.innerText = "paste result:" + result;
-	});
-
-	const navCopyButton = document.querySelector('#nav_copy');
-	const navCopyText = document.querySelector('#nav_input');
-	const navCopyResult = document.querySelector('#nav_copy_result');
-	navCopyButton.addEventListener('click', function() {
-		//navCopyText.select();
-
-		// javayhu navigator.clipboard是有的，但是报错 Write permission denied
-		navigator.clipboard.writeText('hello world');
-
-        // javayhu 如果先判断权限又会报错 Uncaught TypeError: Cannot read property 'query' of undefined
-		navigator.permissions.query({name: "clipboard-write", allowWithoutGesture: true}).then(result => {
-          if (result.state == "granted" || result.state == "prompt") {
-            console.log(result.state);
-            navCopyResult.innerText = "copy result:" + result.state;
-          }
-        });
 	});
 </script>
 </body>
